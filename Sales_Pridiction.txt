@@ -1,0 +1,40 @@
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+import matplotlib.pyplot as plt
+
+# Generate synthetic data for advertising spend and sales
+np.random.seed(42)
+advertising_spend = np.random.rand(100) * 1000  # Advertising spend
+sales = 5 + 0.5 * advertising_spend + (np.random.rand(100) * 100)  # Sales with some noise
+
+# Create a DataFrame
+data = pd.DataFrame({'Advertising Spend': advertising_spend, 'Sales': sales})
+
+# Split the dataset into features (X) and target variable (y)
+X = data[['Advertising Spend']]
+y = data['Sales']
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Initialize and train the linear regression model
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# Make predictions on the test set
+y_pred = model.predict(X_test)
+
+# Plot actual vs. predicted sales
+plt.scatter(X_test, y_test, color='blue', label='Actual Sales')
+plt.scatter(X_test, y_pred, color='red', label='Predicted Sales')
+plt.xlabel('Advertising Spend')
+plt.ylabel('Sales')
+plt.title('Sales Prediction')
+plt.legend()
+plt.show()
+
+# Print model coefficients
+print(f'Intercept: {model.intercept_}')
+print(f'Coefficient: {model.coef_[0]}')
